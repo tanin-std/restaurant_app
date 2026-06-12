@@ -9,7 +9,7 @@ UserDAO::UserDAO(Database &database)
         }
 int UserDAO::userCall(void *data, int argc, char **argv, char **colNames){
     vector<User> *users = static_cast<vector<User >*>(data);
-    if(argc >= 4){
+    if(argc >= 5){
         int id;
         if(argv[0] != nullptr){
             id = stoi(argv[0]);
@@ -38,7 +38,14 @@ int UserDAO::userCall(void *data, int argc, char **argv, char **colNames){
         else{
             role = "";
         } 
-        users->push_back(User(id, userName, pass, role));
+        int restId;
+        if(argv[4] != nullptr){
+            restId = stoi(argv[4]);
+        }
+        else{
+            restId = 0;
+        }
+        users->push_back(User(id, userName, pass, role, restId));
     }
     return 0;
 }
@@ -52,7 +59,7 @@ bool UserDAO::insert(const User &user){
 }
 User *UserDAO::IDfind(int id){
     stringstream sql;
-    sql << "SELECT id, username, password, role FROM users WHERE id = " << id << ";";
+    sql << "SELECT id, username, password, role, restaurant_id FROM users WHERE id = " << id << ";";
     vector<User> users;
     db.Query(sql.str(), userCall, &users);
     if(users.empty()){
@@ -63,7 +70,7 @@ User *UserDAO::IDfind(int id){
 }
 User *UserDAO::Usernamefind(const string &userName){
     stringstream sql;
-    sql << "SELECT id, username, password, role FROM users WHERE username = '"
+    sql << "SELECT id, username, password, role, restaurant_id FROM users WHERE username = '"
         << userName << "';";
     vector<User> users;
     db.Query(sql.str(), userCall, &users);
@@ -75,7 +82,7 @@ User *UserDAO::Usernamefind(const string &userName){
 }
 vector<User> UserDAO::findAll(){
     vector<User> users;
-    db.Query("SELECT id, username, password, role FROM users;", userCall, &users);
+    db.Query("SELECT id, username, password, role, restaurant_id FROM users;", userCall, &users);
     return users;
 }
 
@@ -95,7 +102,7 @@ bool UserDAO::IDdelete(int id){
 
 User *UserDAO::login(const string &userName, const string &pass){
     stringstream sql;
-    sql << "SELECT id, username, password, role FROM users WHERE username = '"
+    sql << "SELECT id, username, password, role, restaurant_id FROM users WHERE username = '"
         << userName << "' AND password = '" << pass << "';";
     vector<User> users;
     db.Query(sql.str(), userCall, &users);

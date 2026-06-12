@@ -2,11 +2,12 @@
 #include<iostream>
 using namespace std;
 
-User::User(int ID, string Name, string password, string Role)
+User::User(int ID, string Name, string password, string Role, int restId)
    :id(ID),
    userName(Name),
    pass(password),
-   role(Role){
+   role(Role),
+   restaurantId(restId){
 
    }
 User::~User(){
@@ -24,6 +25,9 @@ string User::getPass() const{
 string User::getRole() const{
     return role;
 }
+int User::getRestaurantId() const{
+    return restaurantId;
+}
 void User::setID(int newID){
     id = newID;
 }
@@ -32,4 +36,7 @@ void User::setName(const string &newName){
 }
 void User::setPassword(const string &newPass){
     pass = newPass;
+}
+void setRestaurantId(int restId){
+    restaurantId = restId;
 }
