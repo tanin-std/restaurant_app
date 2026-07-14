@@ -9,7 +9,7 @@ MenuItemDAO::MenuItemDAO(Database &database)
      : db(database){
 
      }
-MenuItem *MenuItemDAO::create(char **argv){
+menuItem *MenuItemDAO::create(char **argv){
     if(argv[0] == nullptr){
        return nullptr;
     } 
@@ -71,16 +71,16 @@ MenuItem *MenuItemDAO::create(char **argv){
     return nullptr;
 }
 int MenuItemDAO::menuItemCall(void *data, int argc, char **argv, char **colNames){
-    vector<MenuItem*>* items = static_cast<vector<MenuItem*>*>(data);
+    vector<menuItem*>* items = static_cast<vector<menuItem*>*>(data);
     if(argc >= 7){
-        MenuItem *item = create(argv);
+        menuItem *item = create(argv);
         if(item){
             items->push_back(item);
         }
     }
     return 0;
 }
-bool MenuItemDAO::insert(MenuItem *item){
+bool MenuItemDAO::insert(menuItem *item){
     stringstream sql;
     sql << "INSERT INTO menu_items (restaurant_id, name, description, base_price, type, is_available";
     if(item->getType() == "food"){
@@ -108,32 +108,42 @@ bool MenuItemDAO::insert(MenuItem *item){
     }
     return db.Apply(sql.str()); 
 }
-MenuItem *MenuItemDAO::IDfound(int id){
+menuItem *MenuItemDAO::IDfound(int id){
     stringstream sql;
     sql << "SELECT id, restaurant_id, name, description, base_price, type, is_available, cooking_time, volume "
         << "FROM menu_items WHERE id = " << id << ";";
-    vector<MenuItem*> items;
+    vector<menuItem*> items;
     db.Query(sql.str(), menuItemCall, &items);
     if(items.empty()){
         return nullptr;
     }
     return items[0];
 }
-vector<MenuItem*> MenuItemDAO::RestFind(int restaurantId){
+vector<menuItem*> MenuItemDAO::RestFind(int restaurantId){
     stringstream sql;
     sql << "SELECT id, restaurant_id, name, description, base_price, type, is_available, cooking_time, volume "
         << "FROM menu_items WHERE restaurant_id = " << restaurantId << ";";
-    vector<MenuItem*> items;
+    vector<menuItem*> items;
     db.Query(sql.str(), menuItemCall, &items);
     return items;
 }
-vector<MenuItem*> MenuItemDAO::findAvailable(int restaurantId){
+vector<menuItem*> MenuItemDAO::findAvailable(int restaurantId){
     stringstream sql;
     sql << "SELECT id, restaurant_id, name, description, base_price, type, is_available, cooking_time, volume "
         << "FROM menu_items WHERE restaurant_id = " << restaurantId << " AND is_available = 1;";
-    vector<MenuItem*> items;
+    vector<menuItem*> items;
     db.Query(sql.str(), menuItemCall, &items);
     return items;
+}
+bool MenuItemDAO::update(menuItem *item){
+    if(!item){
+    	return false;
+	}
+    stringstream sql;
+    sql << "UPDATE menu_items SET name = '" << item->getName()<< "', description = '" << item->getDescript()
+        << "', base_price = " << item->getPrice()<< ", is_available = " << item->getAvailable()<< " WHERE id = " << item->getID() << ";";
+    
+    return db.Apply(sql.str());
 }
 bool MenuItemDAO::IDdelete(int id){
     stringstream sql;

@@ -17,5 +17,5 @@ class Database{
     bool Query(const string &Sq,int (*Call)(void *, int, char **, char **), void *data);
     sqlite3 *getDb();
 
-}
+};
 #endif

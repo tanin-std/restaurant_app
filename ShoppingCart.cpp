@@ -9,13 +9,13 @@ ShoppingCart::ShoppingCart()
 ShoppingCart::~ShoppingCart(){
     clear();
 }
-void ShoppingCart::addItem(MenuItem *item, int quantity){
+void ShoppingCart::addItem(menuItem *item, int quantity){
     if(!item || quantity <= 0){
       return;
     } 
     int i;
     for(i=0; i < items.size();i++) {
-        if(items[i].first->getId() == item->getId()){
+        if(items[i].first->getID() == item->getID()){
             items[i].second += quantity;
             Total();
             return;
@@ -28,7 +28,7 @@ void ShoppingCart::addItem(MenuItem *item, int quantity){
 void ShoppingCart::removeItem(int menuItemID){
     int i;
     for(i=0; i < items.size();i++){
-        if(items[i].first->getId() == menuItemID){
+        if(items[i].first->getID() == menuItemID){
             items.erase(items.begin() + i);
             Total();
             return;
@@ -42,7 +42,7 @@ void ShoppingCart::Quantity(int menuItemId, int quantity){
     }
     int i;
     for(i=0; i < items.size();i++){
-        if(items[i].first->getId() == menuItemId){
+        if(items[i].first->getID() == menuItemId){
             items[i].second = quantity;
             Total();
             return;
@@ -80,6 +80,6 @@ bool ShoppingCart::Empty() const{
     return items.empty();
 }
 
-vector<pair<MenuItem *, int>> ShoppingCart::getItems() const{
+vector<pair<menuItem *, int>> ShoppingCart::getItems() const{
     return items;
 }

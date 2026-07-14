@@ -4,11 +4,11 @@ using namespace std;
 
 Database::Database(const string &fileName)
   :Db(nullptr),
-  connection(false){
+  Connection(false){
     int product;
     product = sqlite3_open(fileName.c_str(), &Db);
     if(product == SQLITE_OK){
-        connection = true;
+        Connection = true;
         cout << "connected to the database " << fileName <<endl;
     }
     else{
@@ -22,10 +22,10 @@ Database::~Database(){
     }
 }
 bool Database::Open() const{
-    return connection;
+    return Connection;
 }
 bool Database::Apply(const string &Sq){
-    if(connection != true){
+    if(Connection != true){
         return false;
     }
     char *errorNote = nullptr;
@@ -39,7 +39,7 @@ bool Database::Apply(const string &Sq){
     return true;
 }
 bool Database::Query(const string &Sq,int (*Call)(void *, int, char **, char **), void *data){
-        if(connection != true){
+        if(Connection != true){
             return false;
         }
         char *errorNote = nullptr;

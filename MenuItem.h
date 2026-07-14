@@ -30,6 +30,7 @@ class menuItem{
     void setName(const string &newName);
     void setPrice(double Price);
     void setAvailable(bool Available);
+    void setDescription(const string &newDesc);
     virtual double FinalPrice() const;
     virtual void display() const;
 

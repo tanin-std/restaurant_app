@@ -43,6 +43,9 @@ void menuItem::setPrice(double Price){
 void menuItem::setAvailable(bool Available){
      available = Available;
 }
+void menuItem::setDescription(const string &newDesc){
+    desc = newDesc;
+}
 double menuItem::FinalPrice() const{
     return basePrice;
 }

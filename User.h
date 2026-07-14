@@ -13,7 +13,9 @@ class User{
     int restaurantId;
 
     public:
-    User(int ID = 0, string Name = "", string password = "", string Role = "", int restId = 0);
+    User();
+    User(const User &other); 
+    User(int ID, string Name, string password, string Role, int restId);
     virtual ~User();
     int getID() const;
     string getName() const;
@@ -24,6 +26,6 @@ class User{
     void setName(const string &newName);
     void setPassword(const string &newPass);
     void setRestaurantId(int restId);
-    virtual void showMenu() = 0;
-};
+    virtual void showMenu(){}
+	};
 #endif 

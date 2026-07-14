@@ -60,6 +60,6 @@ void Order::display() const{
     cout << "Items: ";
     int i;
     for(i=0; i < items.size(); i++){
-        cout << "(ID " << item[i].first << " x" << item[i].second << ") "<< endl;;
+        cout << "(ID " << items[i].first << " x" << items[i].second << ") "<< endl;;
     }
 }

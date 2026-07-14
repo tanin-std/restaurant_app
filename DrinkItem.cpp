@@ -4,7 +4,7 @@ using namespace std;
 
 DrinkItem::DrinkItem(int ID, int restId, string Name, string descript, double Price,
             bool Free, double Volume)
-        : MenuItem(ID, restId, Name, descript, Price, "drink", Free),
+        : menuItem(ID, restId, Name, descript, Price, "drink", Free),
       volume(Volume){
 
       }
