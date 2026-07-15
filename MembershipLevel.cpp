@@ -4,7 +4,7 @@ using namespace std;
 
 MembershipLevel::MembershipLevel(string name, int threshold, double mult,
                              double disc, double delivery, string benefit)
-           : levelName(name), pointsThreshold(threshold), multiplier(mult),
+           : levelName(name), PointsThreshold(threshold), multiplier(mult),
               discount(disc), deliveryCost(delivery), benefits(benefit){
                 
               }
@@ -12,13 +12,13 @@ string MembershipLevel::getLevelName() const{
     return levelName; 
 }
 int MembershipLevel::getPoints() const{ 
-    return pointsThreshold; 
+    return PointsThreshold; 
 }
 double MembershipLevel::getMultiplier() const{ 
     return multiplier; 
 }
 double MembershipLevel::getDiscount() const{ 
-    return discountPercent; 
+    return discount; 
 }
 double MembershipLevel::getDeliveryCost() const{ 
     return deliveryCost; 
@@ -28,10 +28,10 @@ string MembershipLevel::getBenefits() const{
 }
 double MembershipLevel::calculateDiscount(double totalPrice) const {
     double result;
-    result = totalPrice * (discount / 100.0)
+    result = totalPrice * (discount / 100.0);
     return result;
 }
-double MembershipLevel::calculateDeliveryCost(double baseCost) const {
+double MembershipLevel::calculateCost(double baseCost) const{
     double cost = baseCost * deliveryCost;
     return cost;
 }
@@ -40,7 +40,7 @@ int MembershipLevel::calculatePoints(int basePoints) const{
 }
 void MembershipLevel::displayInfo() const{
     cout << "Level: " << levelName << endl;
-    cout << "Threshold: " << pointsThreshold << " points" << endl;
+    cout << "Threshold: " << PointsThreshold << " points" << endl;
     cout << "Multiplier: " << multiplier << "x" << endl;
     cout << "Discount: " << discount << "%" << endl;
     cout << "Delivery: ";

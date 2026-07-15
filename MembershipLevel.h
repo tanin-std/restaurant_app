@@ -26,7 +26,7 @@ public:
     double getDeliveryCost() const;
     string getBenefits() const;
     virtual double calculateDiscount(double totalPrice) const;
-    virtual double calculateDeliveryCost(double baseCost) const;
+    virtual double calculateCost(double baseCost) const;
     virtual int calculatePoints(int basePoints) const;
     virtual void displayInfo() const;
 };
