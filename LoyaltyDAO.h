@@ -1,6 +1,8 @@
 #ifndef LOYALTYDAO_H
 #define LOYALTYDAO_H
 #include<iostream>
+#include<vector>
+#include<string>
 #include "Database.h"
 #include "LoyaltySystem.h"
 
@@ -16,5 +18,7 @@ public:
     bool updatePoints(int userId, int points);
     bool updateLevel(int userId, const string &level);
     void LevelChange(int userId, const string &oldLevel, const string &newLevel, const string &actor);
+    bool executeQuery(const string &sql, int (*callback)(void*, int, char**, char**), void* data);
+    vector<string> getHistory(int userId);
 };
 #endif
