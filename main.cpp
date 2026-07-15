@@ -8,6 +8,7 @@
 #include "CustomerMenu.h"
 #include "ManagerMenu.h"
 #include "AdminMenu.h"
+#include "LoyaltyDAO.h"
 using namespace std;
 
 User* login(UserDAO &userDAO){
@@ -32,6 +33,7 @@ int main(){
     RestaurantDAO restaurantDAO(db);
     MenuItemDAO menuItemDAO(db);
     OrderDAO orderDAO(db);
+    LoyaltyDAO loyaltyDAO(db);
     int mainChoice;
     do{
         cout << "\n1. Login\n0. Exit\nChoice: ";
@@ -42,20 +44,20 @@ int main(){
                 cout << "\nWelcome " << user->getName() << " Role: " << user->getRole() << endl;
                 if(user->getRole() == "customer"){
                     CustomerMenu *customer = new CustomerMenu(user->getID(), user->getName(), user->getPass());
-                    customer->setDAO(&restaurantDAO, &menuItemDAO, &orderDAO);
+                    customer->setDAO(&restaurantDAO, &menuItemDAO, &orderDAO, &loyaltyDAO);
                     customer->showMenu();
                     delete customer;
                 }
                 else if(user->getRole() == "manager"){
                     int restId = user->getRestaurantId(); 
                     ManagerMenu* manager = new ManagerMenu(user->getID(), user->getName(), user->getPass(), restId);
-                    manager->setDAO(&restaurantDAO, &menuItemDAO, &orderDAO);
+                    manager->setDAO(&restaurantDAO, &menuItemDAO, &orderDAO, &loyaltyDAO);
                     manager->showMenu();
                     delete manager;
                 }
                 else if(user->getRole() == "admin"){
                     AdminMenu* admin = new AdminMenu(user->getID(), user->getName(), user->getPass());
-                    admin->setDAO(&restaurantDAO, &userDAO, &orderDAO);
+                    admin->setDAO(&restaurantDAO, &userDAO, &orderDAO, &loyaltyDAO);
                     admin->showMenu();
                     delete admin;
                 }
