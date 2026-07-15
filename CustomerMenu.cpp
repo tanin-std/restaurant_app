@@ -8,16 +8,25 @@ CustomerMenu::CustomerMenu(int id, string username, string password)
     : User(id, username, password, "customer", 0), 
     restaurantDAO(nullptr), 
     menuItemDAO(nullptr), 
-    orderDAO(nullptr){
+    orderDAO(nullptr),
+	loyalty(nullptr),
+	loyaltyDAO(nullptr){
 
     }
 CustomerMenu::~CustomerMenu(){
-
+    delete loyalty;
 }
-void CustomerMenu::setDAO(RestaurantDAO *rDAO, MenuItemDAO *mDAO, OrderDAO *oDAO){
+void CustomerMenu::setDAO(RestaurantDAO *rDAO, MenuItemDAO *mDAO, OrderDAO *oDAO, LoyaltyDAO* lDAO){
     restaurantDAO = rDAO;
     menuItemDAO = mDAO;
     orderDAO = oDAO;
+    loyaltyDAO = lDAO;
+    if(loyaltyDAO){
+        loyalty = loyaltyDAO->load(getID());
+        if(!loyalty){
+            loyalty = new LoyaltySystem(getID());
+        }
+    }
 }
 void CustomerMenu::showRestaurants(){
     if(!restaurantDAO){
@@ -88,6 +97,20 @@ void CustomerMenu::checkout(){
         return;
     }
     cart.display();
+    double baseTotal = cart.Total();
+    double discount = loyalty->calculateDiscount(baseTotal);
+    double discountTotal = baseTotal - discount;
+    double deliveryCost = loyalty->calculateCost(5000); 
+    double finalTotal = discountTotal + deliveryCost;
+    int basePoints = (int)(baseTotal / 1000);
+    int Points = loyalty->calculatePoints(basePoints);
+    cout << "\n-- ORDER SUMMARY --" << endl;
+    cout << "Base total: " << baseTotal << " T" << endl;
+    cout << "Discount " << loyalty->getLevel() << ": -" << discount << " T" << endl;
+    cout << "Delivery: " << deliveryCost << " T" << endl;
+    cout << "Final total: " << finalTotal << " T" << endl;
+    cout << "Points earned: " << Points << endl;
+    cout << "Total points: " << loyalty->getPoints() << endl;
     int confirm;
     cout << "Do you Confirm order? (1=Yes, 0=No): ";
     cin >> confirm;
@@ -99,6 +122,8 @@ void CustomerMenu::checkout(){
         double total = cart.Total();
         Order newOrder(0, getID(), restId, total, "pending", "");
         if(orderDAO->insert(newOrder)){
+        	loyalty->addPoint(Points);
+        loyaltyDAO->save(getID(), loyalty->getPoints(), loyalty->getLevel());
             cout << "\nOrder placed successfully!" << endl;
             cout << "Status: Pending \n";
             cout << "Restaurant has been notified\n";
@@ -128,6 +153,9 @@ void CustomerMenu::showMenu(){
     int choice, restId;
     do {
         cout << "\n---Customer Menu---\n";
+        if(loyalty){
+            loyalty->displayInfo();
+        }
         cout << "1. View active restaurants\n";
         cout << "2. View restaurant menu\n";
         cout << "3. View shopping cart\n";
@@ -147,7 +175,7 @@ void CustomerMenu::showMenu(){
             break;
             case 4: showOrderHistory(); 
             break;
-            case 0: cout << "Logging out...\n"; 
+            case 0: cout << "Logging out..\n"; 
             break;
             default: cout << "Invalid choice.\n";
         }
