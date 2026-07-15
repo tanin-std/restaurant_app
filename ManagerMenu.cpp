@@ -12,10 +12,11 @@ ManagerMenu::ManagerMenu(int id, string username, string password, int restId)
     orderDAO(nullptr){
 
     }
-void ManagerMenu::setDAO(RestaurantDAO *rDAO, MenuItemDAO *mDAO, OrderDAO *oDAO){
+void ManagerMenu::setDAO(RestaurantDAO *rDAO, MenuItemDAO *mDAO, OrderDAO *oDAO, LoyaltyDAO *lDAO){
     restaurantDAO = rDAO;
     menuItemDAO = mDAO;
     orderDAO = oDAO;
+    loyaltyDAO = lDAO;
 }
 void ManagerMenu::showRestaurantInfo(){
     Restaurant *r = restaurantDAO->Idfind(managed);
