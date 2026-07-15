@@ -7,7 +7,7 @@
 using namespace std;
 
 LoyaltySystem::LoyaltySystem(int userId) 
-            : userId(userId), totalPoints(0), Level("Normal") {
+            : userId(userId), totalPoints(0), Level("Normal"){
             updateLevel();
 }
 
@@ -82,7 +82,7 @@ int LoyaltySystem::calculatePoints(int basePoints) const{
     return levelStrategy->calculatePoints(basePoints);
 }
 void LoyaltySystem::displayInfo() const{
-    cout << "+-----------------------------+" << endl;
+    cout << "-----------------------------" << endl;
     cout << "Level: " << Level << endl;
     cout << "Points: " << totalPoints << endl;
     cout << "Discount: " << levelStrategy->getDiscount() << "%" << endl;
@@ -97,16 +97,16 @@ void LoyaltySystem::displayInfo() const{
         cout << "Full price";
     }
     cout << endl;
-    cout << "+-----------------------------+" << endl;
+    cout << "-----------------------------" << endl;
 }
 int LoyaltySystem::getUserId() const { 
     return userId; 
 }
-int LoyaltySystem::getTotalPoints() const { 
+int LoyaltySystem::getPoints() const { 
     return totalPoints; 
 }
 string LoyaltySystem::getLevel() const { 
-    return currentLevel; 
+    return Level; 
 }
 void LoyaltySystem::setLevel(const string &newlevel) { 
     Level = newlevel; 
